@@ -1,20 +1,33 @@
+const { StatusCodes } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
 
-module.exports = (req, res, next) => {
-    try {
-        const token = req.headers.authorization.split(' ')[1];
-        const decodedToken = jwt.verify(token, jwtConfig.secretKey);
+exports.ensureToken = (req, res, next) => {
+        const authHeader=req.headers.authorization;
+        
+        if(authHeader){
+            const token = authHeader.split(' ')[1];
 
+            jwt.verify(token,jwtConfig.secretKey,(err,user)=>{
+                if(err){
+                        return res.status(StatusCodes.OK).json({
+                        status:StatusCodes.UNAUTHORIZED,
+                        data:[],
+                        errorMessage:err.message
+                    });
+                }
 
-        if (decodedToken) {
-            next();
-        } else {
-            throw 'Invalid user ID';
+                req.user=user;
+                next();
+            })
         }
-    } catch {
-        res.status(401).json({
-            error: new Error('Invalid request!')
-        });
+        else{
+            return res.status(StatusCodes.OK).json({
+                status:StatusCodes.UNAUTHORIZED,
+                data:[],
+                errorMessage:"Authorization Token is missing !!"
+            });
+        }
+    
+
     }
-};

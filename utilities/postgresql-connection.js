@@ -38,7 +38,7 @@ async function getResultArray(sqlQuery, params = []) {
 
                 case "INSERT":
                     if (result.rowCount > 0) {
-                        data = [];
+                        data = [...result.rows];
                         status = StatusCodes.CREATED
                     }
 

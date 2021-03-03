@@ -1,9 +1,9 @@
 module.exports = {
     dbConnection: {
         user: "postgres",
-        password: "nanda",
+        password: "1234",
         host: "localhost",
-        database: "auto_parts",
+        database: "postgres",
         port: 5432
     },
     server: {
@@ -21,6 +21,13 @@ module.exports = {
         OUT_FOR_DELIVERY: 5,
         DELIVERED: 6,
         CANCELED: 7
+    },
+    PaginationDefaults:{
+        perPageSize:10,
+        pageNumber:1,
+        sortBy:"part_price",
+        sortOrder:"ASC",
+        category_id:"NA"
     }
 
 
